@@ -60,9 +60,8 @@ ElfParser_Error elfparser_get_program_header(const void* elf_start, const ElfPar
 
 /* Reads up to `num_bytes` of data from the segment (program header) referenced by `segment_index` and writes it to `dest`
  * Reading starts at an offset of `skip` bytes allowing for incremental reads
- * Returns how many bytes are left to read, or ELFPARSER_WRITE_SEGMENT_ERROR (equivalent to UINTMAX_MAX) on failure
+ * Returns how many bytes are left to read, or ELFPARSER_INVALID (equivalent to UINT64_MAX) on failure
  * if `dest` is NULL, returns the total memory size (not file size) of the segment*/
-#define ELFPARSER_WRITE_SEGMENT_ERROR UINTMAX_MAX
 uint64_t elfparser_copy_segment(const void* elf_start, const ElfParser_Header* header, uint64_t segment_index,
                                 void* dest, uint64_t skip, uint64_t num_bytes);
 

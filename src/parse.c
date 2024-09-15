@@ -202,11 +202,11 @@ uint64_t elfparser_copy_segment(const void* elf_start, const ElfParser_Header* h
 
     ElfParser_ProgramHeader program_header;
     ElfParser_Error err = elfparser_get_program_header(elf_start, header, segment_index, &program_header);
-    if (err != ELFPARSER_NOERROR) return ELFPARSER_WRITE_SEGMENT_ERROR; // Can't proceed if program header is unable to be read
+    if (err != ELFPARSER_NOERROR) return ELFPARSER_INVALID; // Can't proceed if program header is unable to be read
 
     if (dest == NULL) return program_header.p_memsz; // No valid destination
     
-    if (program_header.p_offset + program_header.p_filesz > header->elf_size) return ELFPARSER_WRITE_SEGMENT_ERROR; // Program header has bad data
+    if (program_header.p_offset + program_header.p_filesz > header->elf_size) return ELFPARSER_INVALID; // Program header has bad data
     
     // Limit number of bytes that will be read
     num_bytes = min(num_bytes, program_header.p_memsz - skip);

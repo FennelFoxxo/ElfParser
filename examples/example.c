@@ -173,7 +173,7 @@ int main() {
    
    uint64_t total_bytes_to_copy = elfparser_copy_segment(data, &header, segment_to_read_from, NULL, 0, 0);
    
-   if (total_bytes_to_copy == ELFPARSER_WRITE_SEGMENT_ERROR) {
+   if (total_bytes_to_copy == ELFPARSER_INVALID) {
        printf("Could not read data from segment #%d!\n", segment_to_read_from);
     } else {
         uint64_t bytes_left = elfparser_copy_segment(data, &header, segment_to_read_from, buffer, 0, BUFFER_SIZE);

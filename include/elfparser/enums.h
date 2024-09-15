@@ -24,10 +24,12 @@
 
 #pragma once
 
+#include <stdint.h>
+
 typedef enum {
-    ELFPARSER_NOERROR,      // Success
-    ELFPARSER_INVALID,      // Failed to parse elf format
-    ELFPARSER_NOT_FOUND     // Requested symbol or string not found
+    ELFPARSER_NOERROR,              // Success
+    ELFPARSER_NOT_FOUND,            // Requested symbol or string not found
+    ELFPARSER_INVALID = UINT64_MAX  // Failed to parse elf format
 } ElfParser_Error;
 
 typedef enum {
