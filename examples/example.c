@@ -137,35 +137,37 @@ int main() {
             return 1;
         }
         printf("  Symbol #%llu:\n",         (long long unsigned)i);
-        printf("    st_name:\t\t%x\n",                          symbol.st_name);
+        printf("    name:\t\t%s\n",                             symbol.name);
         printf("    st_value:\t\t0x%llx\n", (long long unsigned)symbol.st_value);
         printf("    st_size:\t\t0x%llx\n",  (long long unsigned)symbol.st_size);
-        printf("    st_bind:\t\t%d\n", symbol.st_bind);
-        printf("      - is valid:\t%s\n", elfparser_is_valid_st_bind(symbol.st_bind) ? "Yes" : "No");
-        printf("    st_type:\t\t%d\n", symbol.st_type);
-        printf("      - is valid:\t%s\n", elfparser_is_valid_st_type(symbol.st_type) ? "Yes" : "No");
-        printf("    st_visibility:\t%d\n", symbol.st_visibility);
-        printf("    st_shndx:\t\t%d\n", symbol.st_shndx);
+        printf("    st_bind:\t\t%d\n",                          symbol.st_bind);
+        printf("      - is valid:\t%s\n",   elfparser_is_valid_st_bind(symbol.st_bind) ? "Yes" : "No");
+        printf("    st_type:\t\t%d\n",                          symbol.st_type);
+        printf("      - is valid:\t%s\n",   elfparser_is_valid_st_type(symbol.st_type) ? "Yes" : "No");
+        printf("    st_visibility:\t%d\n",                      symbol.st_visibility);
+        printf("    st_shndx:\t\t%d\n",                         symbol.st_shndx);
         printf("\n");
    }
    
     printf("\n\n");
     
-    err = elfparser_get_section_header_by_name(data, &header, ".text", &section);
+    err = elfparser_get_section_header_by_name(data, &header, ".myspecialsection1", &section);
     if (err == ELFPARSER_NOERROR) {
-        printf("Section '.text' found! Vaddr = 0x%llx\n", (long long unsigned)section.sh_addr);
+        printf("Section '.myspecialsection1' found! Vaddr = 0x%llx\n", (long long unsigned)section.sh_addr);
     } else {
-        printf("Section 'text' not found!\n");
+        printf("Section '.myspecialsection1' not found!\n");
     }
     
-   err = elfparser_get_symbol_by_name(data, &header, "_start", &symbol);
+   err = elfparser_get_symbol_by_name(data, &header, "myint1", &symbol);
    if (err == ELFPARSER_NOERROR) {
-       printf("Symbol '_start' found! Value = 0x%llx\n", (long long unsigned)symbol.st_value);
+       printf("Symbol 'myint1' found! Value = 0x%llx\n", (long long unsigned)symbol.st_value);
    } else {
-       printf("Symbol '_start' not found!\n");
+       printf("Symbol 'myint1' not found!\n");
    }
    
    printf("\n\n");
+   
+   // Example of copying data from segment to buffer
    
    #define BUFFER_SIZE 100
    uint8_t buffer[BUFFER_SIZE];
