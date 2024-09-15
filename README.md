@@ -6,7 +6,9 @@ In particular, this library:
 - Performs no dynamic memory allocation
 - Performs as few validation checks as necessary (e.g. checking elf magic number) and returns header fields as is
 
-It supports reading the ELF header, section headers, program headers, and symbols from the .symtab section. It supports reading from 32- or 64-bit, little- or big- endian ELF files
+It supports reading the ELF header, section headers, program headers, and symbols from the .symtab section. It supports reading from 32- or 64- bit, little- or big- endian ELF files
+
+[Much of the information about the ELF format was obtained from here](https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html)
 
 # Documentation
 
