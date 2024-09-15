@@ -10,6 +10,9 @@ It supports reading the ELF header, section headers, program headers, and symbol
 
 [Much of the information about the ELF format was obtained from here](https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html)
 
+# How to run
+Simply run `make` in the root project directory, and then run the `example` program, which will print information about the `testelf` ELF file
+
 # Documentation
 
 
