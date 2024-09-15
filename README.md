@@ -10,6 +10,8 @@ It supports reading the ELF header, section headers, program headers, and symbol
 
 # Documentation
 
+
+
 ## Parsing functions
 
 ### elfparser_get_header
@@ -74,6 +76,78 @@ It supports reading the ELF header, section headers, program headers, and symbol
 - `skip`: offset in bytes to skip ahead in the segment before copying begins - allows for incremental reads
 - `num_bytes`: reads up to this many bytes from the segment, but the actual amount of bytes copied may be lower if copying would run past the end of the segment
 - Returns: `ELFPARSER_INVALID` on failure (equivalent to `UINT64_MAX`), else # of bytes copied on success. If `dest` is NULL, returns total memory size of the segment
+
+
+
+## Structs
+
+### ElfParser_Header
+- `ei_class`: `ElfParser_EI_Class`
+- `ei_data`: `ElfParser_EI_Data`
+- `ei_version`: `ElfParser_EI_Version`
+- `ei_osabi`: `ElfParser_EI_OSABI`
+- `ei_abiversion`: `uint8_t`
+- `e_type`: `ElfParser_E_Type`
+- `e_machine`: `ElfParser_E_Machine`
+- `e_version`: `ElfParser_E_Version`
+- `e_entry`: `uint64_t`
+- `e_phoff`: `uint64_t`
+- `e_shoff`: `uint64_t`
+- `e_flags`: `uint32_t`
+- `e_ehsize`: `uint16_t`
+- `e_phentsize`: `uint16_t`
+- `e_phnum`: `uint16_t`
+- `e_shentsize`: `uint16_t`
+- `e_shnum`: `uint16_t`
+- `e_shstrndx`: `uint16_t`
+- `string_table_offset`: `uint64_t` (byte offset of .shstrtab data referenced by `e_shstrndx`)
+- `symbol_table_offset`: `uint64_t` (byte offset of .symtab data)
+- `symbol_string_table_offset`: `uint64_t` (byte offset of .strtab data referenced by .symtab)
+- `symbol_entry_size`: `uint64_t` (size in bytes of each symbol entry)
+- `symbol_num`: `uint64_t` (total number of symbols)
+- `true_shnum`: `uint64_t` (if there are too many sections to store in `e_shnum`, the true number of sections is stored elsewhere. This value accounts for that case, and should be used when determining how many sections are actually present)
+- `true_shstrndx`: `uint64_t` (same as previous member, accounts for the case if `e_shstrndx` is not big enough to store string table section index)
+- `elf_size`: `uint64_t` (total size of the elf file, this is not read from the file but is copied from `elf_size` parameter in `elfparser_get_header`)
+
+### ElfParser_SectionHeader
+- `sh_name`: `uint64_t`
+- `sh_type`: `ElfParser_SH_Type`
+- `sh_flags`: `ElfParser_SH_Flags`
+- `sh_addr`: `uint64_t`
+- `sh_offset`: `uint64_t`
+- `sh_size`: `uint64_t`
+- `sh_link`: `uint32_t`
+- `sh_info`: `uint32_t`
+- `sh_addralign`: `uint64_t`
+- `sh_entsize`: `uint64_t`
+- `name`: `const char*` (calculated from `sh_name` and .shstrtab offset. Will always point to null-terminated string)
+- `index`: `uint64_t` (index of this section, useful if section was obtained by name)
+
+### ElfParser_Symbol
+- `st_name`: `uint32_t`
+- `st_value`: `uint64_t`
+- `st_size`: `uint64_t`
+- `st_info`: `uint8_t`
+- `st_other`: `uint8_t`
+- `st_shndx`: `st_shndx`
+- `st_bind`: `ElfParser_ST_Bind` (upper nibble of `st_info`)
+- `st_type`: `ElfParser_ST_Type` (lower nibble of `st_info`)
+- `st_visibility`: `ElfParser_ST_Visibility` (lower 2 bites of `st_other`)
+- `name`: `const char*` (calculated from `st_name` and .symtab offset. Will always point to null-terminated string)
+- `index`: `uint64_t` (index of this symbol, useful if symbol was obtained by name)
+
+### ElfParser_ProgramHeader
+- `p_type`: `ElfParser_P_Type`
+- `p_offset`: `uint64_t`
+- `p_vaddr`: `uint64_t`
+- `p_paddr`: `uint64_t`
+- `p_filesz`: `uint64_t`
+- `p_memsz`: `uint64_t`
+- `p_flags`: `ElfParser_P_Flags`
+- `p_align`: `uint64_t`
+- `index`: `uint64_t` (index of this program header)
+
+
 
 ## Validation functions
 These are optional functions which may be used to check if certain fields are valid, (i.e. checking if section type is valid). This library attempts to be as liberal as possible in what input it accepts, so many of these checks are not performed when reading the ELF file. Some of these functions always return true because all possible inputs are potentially valid (e.g. e_machine) - these are here for completeness. Every `x` enum has a matching `elfparser_is_valid_x` function
